@@ -9,8 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReceiptController extends AbstractController
 {
     #[Route('/api/receipt', name: 'app_receipt')]
-    public function index(): Response
+    public function index(): ?Response
     {
-
+        return null;
     }
 }
