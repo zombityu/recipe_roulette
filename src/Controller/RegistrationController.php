@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\DTO\DTOSerializer;
 use App\DTO\RegistrationDTO;
+use App\DTO\ResponseDto;
 use App\Service\RegistrationServiceInterface;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,20 +38,16 @@ class RegistrationController extends AbstractController
             $errorMessages = $this->registrationService->registerUser($data);
 
             if (!empty($errorMessages)) {
-                return $this->json([
-                    'success' => false,
-                    'message' => 'The provided data is invalid.',
-                    'errors' => $errorMessages,
-                ], 422);
+                return $this->json(
+                    new ResponseDto(false, 'The provided data is invalid.', $errorMessages), 422);
             }
         } catch (InvalidArgumentException $e) {
             return new Response($e->getMessage(), Response::HTTP_CONFLICT);
         }
 
-        return $this->json([
-            'success' => true,
-            'message' => 'Successful registration',
-            'errors' => null
-        ], Response::HTTP_CREATED);
+        return $this->json(
+            new ResponseDto(true, 'Successful registration', []),
+            Response::HTTP_CREATED
+        );
     }
 }

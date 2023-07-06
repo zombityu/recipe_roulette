@@ -8,9 +8,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ReceiptController extends AbstractController
 {
-    #[Route('/api/receipt', name: 'app_receipt')]
-    public function index(): ?Response
+    #[Route('/api/receipts', name: 'app_receipt')]
+    public function getReceipts(): Response
     {
-        return null;
+        $email = $this->getUser()->getUserIdentifier();
+
+
+        return $this->json([
+            'message' => 'Welcome to your new controller!',
+            'path' => 'src/Controller/ReceiptController.php',
+        ]);
     }
 }
