@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ReceiptTypeRepository;
+use App\Repository\RecipeTypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReceiptTypeRepository::class)]
-class ReceiptType
+#[ORM\Entity(repositoryClass: RecipeTypeRepository::class)]
+class RecipeType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

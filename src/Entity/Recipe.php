@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ReceiptRepository;
+use App\Repository\RecipeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReceiptRepository::class)]
-#[ApiResource]
-class Receipt
+#[ORM\Entity(repositoryClass: RecipeRepository::class)]
+class Recipe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,16 +26,11 @@ class Receipt
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ReceiptType $type = null;
+    private ?RecipeType $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'receipts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
-    public function __construct()
-    {
-        $this->type = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -80,12 +73,12 @@ class Receipt
         return $this;
     }
 
-    public function getType(): ?ReceiptType
+    public function getType(): ?RecipeType
     {
         return $this->type;
     }
 
-    public function setType(?ReceiptType $type): static
+    public function setType(?RecipeType $type): static
     {
         $this->type = $type;
 

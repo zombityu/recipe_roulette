@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Receipt;
+use App\Entity\RecipeType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Receipt>
+ * @extends ServiceEntityRepository<RecipeType>
  *
- * @method Receipt|null find($id, $lockMode = null, $lockVersion = null)
- * @method Receipt|null findOneBy(array $criteria, array $orderBy = null)
- * @method Receipt[]    findAll()
- * @method Receipt[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RecipeType|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RecipeType|null findOneBy(array $criteria, array $orderBy = null)
+ * @method RecipeType[]    findAll()
+ * @method RecipeType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ReceiptRepository extends ServiceEntityRepository
+class RecipeTypeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Receipt::class);
+        parent::__construct($registry, RecipeType::class);
     }
 
-    public function save(Receipt $entity, bool $flush = false): void
+    public function save(RecipeType $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class ReceiptRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Receipt $entity, bool $flush = false): void
+    public function remove(RecipeType $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class ReceiptRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Receipt[] Returns an array of Receipt objects
+//     * @return RecipeType[] Returns an array of RecipeType objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class ReceiptRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Receipt
+//    public function findOneBySomeField($value): ?RecipeType
 //    {
 //        return $this->createQueryBuilder('r')
 //            ->andWhere('r.exampleField = :val')

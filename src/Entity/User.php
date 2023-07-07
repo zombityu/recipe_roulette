@@ -28,14 +28,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     #[Assert\NotBlank]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Receipt::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recipe::class, orphanRemoval: true)]
     private Collection $receipts;
 
     public function __construct()
@@ -114,14 +111,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Receipt>
+     * @return Collection<int, Recipe>
      */
     public function getReceipts(): Collection
     {
         return $this->receipts;
     }
 
-    public function addReceipt(Receipt $receipt): static
+    public function addReceipt(Recipe $receipt): static
     {
         if (!$this->receipts->contains($receipt)) {
             $this->receipts->add($receipt);
@@ -131,7 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeReceipt(Receipt $receipt): static
+    public function removeReceipt(Recipe $receipt): static
     {
         if ($this->receipts->removeElement($receipt)) {
             // set the owning side to null (unless already changed)
