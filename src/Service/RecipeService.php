@@ -53,7 +53,7 @@ class RecipeService implements RecipeServiceInterface
 
         $recipe = $this->createRecipe($name, $receiptDTO, $type, $user);
 
-        $this->receiptRepository->save($recipe);
+        $this->receiptRepository->save($recipe, true);
     }
 
 
@@ -114,9 +114,12 @@ class RecipeService implements RecipeServiceInterface
         return $recipeResponse;
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function deleteRecipe(UserInterface $user, string $recipeName): void
     {
         $recipe = $this->receiptRepository->findOneByRecipe($user, $recipeName);
-        $this->receiptRepository->remove($recipe);
+        $this->receiptRepository->remove($recipe, true);
     }
 }

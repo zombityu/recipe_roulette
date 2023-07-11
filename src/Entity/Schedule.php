@@ -17,6 +17,13 @@ class Schedule
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dayOfCooking = null;
 
+    #[ORM\ManyToOne(inversedBy: 'schedules')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'schedules')]
+    private ?Recipe $recipe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -30,6 +37,30 @@ class Schedule
     public function setDayOfCooking(\DateTimeInterface $dayOfCooking): static
     {
         $this->dayOfCooking = $dayOfCooking;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRecipe(): ?Recipe
+    {
+        return $this->recipe;
+    }
+
+    public function setRecipe(?Recipe $recipe): static
+    {
+        $this->recipe = $recipe;
 
         return $this;
     }

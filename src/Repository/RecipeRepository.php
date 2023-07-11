@@ -58,6 +58,9 @@ class RecipeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return array{Recipe}
+     */
     public function findAllRecipe(UserInterface $user): array
     {
         return $this->createQueryBuilder('r')

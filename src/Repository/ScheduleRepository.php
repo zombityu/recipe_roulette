@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Schedule;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,20 +40,20 @@ class ScheduleRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Schedule[] Returns an array of Schedule objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Schedule[]
+     */
+    public function findAllSchedule(string $email): array
+    {
+        return $this->createQueryBuilder('s')
+            ->join('s.user', 'u')
+            ->join('s.recipe', 'r')
+            ->andWhere('u.email = :email')
+            ->setParameter('email', $email)
+            ->orderBy('s.dayOfCooking', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Schedule
 //    {
