@@ -18,34 +18,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RecipeService implements RecipeServiceInterface
 {
-    private readonly RecipeRepository $receiptRepository;
-    private readonly RecipeTypeRepository $receiptTypeRepository;
-    private readonly UserRepository $userRepository;
-
-    public function __construct(RecipeRepository $receiptRepository, RecipeTypeRepository $receiptTypeRepository, UserRepository $userRepository)
-    {
-        $this->receiptRepository = $receiptRepository;
-        $this->receiptTypeRepository = $receiptTypeRepository;
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private readonly RecipeRepository $receiptRepository,
+        private readonly RecipeTypeRepository $receiptTypeRepository,
+        private readonly UserRepository $userRepository
+    ) {
     }
 
     public function save(RecipeRequestDTO $receiptDTO, UserInterface $user): void
     {
         $name = $receiptDTO->getName();
 
-        $receipt = $this->receiptRepository->findOneBy([
-            'name' => $name
-        ]);
+        $this->checkReceiptExist($name);
 
-        if ($receipt !== null) {
-            throw new InvalidArgumentException('Recipe already exist!');
-        }
-
-        $type = $this->receiptTypeRepository->find($receiptDTO->getTypeId());
-
-        if ($type === null) {
-            throw new InvalidArgumentException("Recipe Type does not exist!");
-        }
+        $type = $this->getRecipeType($receiptDTO);
 
         $user = $this->userRepository->findOneBy([
             'email' => $user->getUserIdentifier(),
@@ -121,5 +107,26 @@ class RecipeService implements RecipeServiceInterface
     {
         $recipe = $this->receiptRepository->findOneByRecipe($user, $recipeName);
         $this->receiptRepository->remove($recipe, true);
+    }
+
+    private function checkReceiptExist(string $name): void
+    {
+        $receipt = $this->receiptRepository->findOneBy([
+            'name' => $name
+        ]);
+
+        if ($receipt !== null) {
+            throw new InvalidArgumentException('Recipe already exist!');
+        }
+    }
+
+    public function getRecipeType(RecipeRequestDTO $receiptDTO): RecipeType
+    {
+        $type = $this->receiptTypeRepository->find($receiptDTO->getTypeId());
+
+        if ($type === null) {
+            throw new InvalidArgumentException("Recipe Type does not exist!");
+        }
+        return $type;
     }
 }
