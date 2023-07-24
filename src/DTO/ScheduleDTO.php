@@ -12,8 +12,13 @@ class ScheduleDTO
     private readonly string $description;
     private readonly string $recipeType;
 
-    public function __construct(DateTimeInterface $dayOfCooking, string $receiptName, string $photo, string $description, string $recipeType)
-    {
+    public function __construct(
+        DateTimeInterface $dayOfCooking,
+        string $receiptName,
+        string $photo,
+        string $description,
+        string $recipeType
+    ) {
         $this->dayOfCooking = $dayOfCooking;
         $this->receiptName = $receiptName;
         $this->photo = $photo;

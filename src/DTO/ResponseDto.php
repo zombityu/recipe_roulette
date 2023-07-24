@@ -31,6 +31,4 @@ class ResponseDto
     {
         return $this->errors;
     }
-
-
 }

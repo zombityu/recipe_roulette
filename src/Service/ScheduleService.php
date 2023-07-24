@@ -22,8 +22,11 @@ class ScheduleService implements ScheduleServiceInterface
     private readonly UserRepository $userRepository;
     private readonly ScheduleRepository $scheduleRepository;
 
-    public function __construct(RecipeRepository $recipeRepository, UserRepository $userRepository, ScheduleRepository $scheduleRepository)
-    {
+    public function __construct(
+        RecipeRepository $recipeRepository,
+        UserRepository $userRepository,
+        ScheduleRepository $scheduleRepository
+    ) {
         $this->recipeRepository = $recipeRepository;
         $this->userRepository = $userRepository;
         $this->scheduleRepository = $scheduleRepository;

@@ -76,7 +76,7 @@ class RecipeServiceTest extends TestCase
             ->expects($this->once())
             ->method('find')
             ->with($recipeTypeId)
-            ->willReturn(New RecipeType());
+            ->willReturn(new RecipeType());
 
         $this->userInterfaceMock
             ->method('getUserIdentifier')

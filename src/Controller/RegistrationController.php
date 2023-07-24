@@ -39,7 +39,9 @@ class RegistrationController extends AbstractController
 
             if (!empty($errorMessages)) {
                 return $this->json(
-                    new ResponseDto(false, 'The provided data is invalid.', $errorMessages), 422);
+                    new ResponseDto(false, 'The provided data is invalid.', $errorMessages),
+                    422
+                );
             }
         } catch (InvalidArgumentException $e) {
             return new Response($e->getMessage(), Response::HTTP_CONFLICT);

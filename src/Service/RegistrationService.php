@@ -24,8 +24,7 @@ class RegistrationService implements RegistrationServiceInterface
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
         ValidatorInterface $validator
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->userPasswordHasher = $userPasswordHasher;
         $this->entityManager = $entityManager;
@@ -42,7 +41,7 @@ class RegistrationService implements RegistrationServiceInterface
             'email' => $email
         ]);
 
-        if($user !== null){
+        if ($user !== null) {
             throw new InvalidArgumentException("User already exist!");
         }
 

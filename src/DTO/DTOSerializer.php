@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class DTOSerializer implements SerializerInterface
 {
-
     private SerializerInterface $serializer;
 
     public function __construct()
@@ -30,6 +29,6 @@ class DTOSerializer implements SerializerInterface
 
     public function deserialize(mixed $data, string $type, string $format, array $context = []): mixed
     {
-       return $this->serializer->deserialize($data, $type, $format, $context);
+        return $this->serializer->deserialize($data, $type, $format, $context);
     }
 }
