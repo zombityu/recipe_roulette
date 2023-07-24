@@ -43,8 +43,12 @@ class RecipeService implements RecipeServiceInterface
     }
 
 
-    private function createRecipe(string $name, RecipeRequestDTO $receiptDTO, RecipeType $type, User $user): Recipe
-    {
+    private function createRecipe(
+        string $name,
+        RecipeRequestDTO $receiptDTO,
+        RecipeType $type,
+        User $user
+    ): Recipe {
         $receipt = new Recipe();
         $receipt->setName($name);
         $receipt->setPhoto($receiptDTO->getPhoto());

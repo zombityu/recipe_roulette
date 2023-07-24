@@ -4,6 +4,8 @@ namespace App\Tests\Service;
 
 use App\DTO\RecipeRequestDTO;
 use App\Entity\Recipe;
+use App\Entity\RecipeType;
+use App\Entity\User;
 use App\Repository\RecipeRepository;
 use App\Repository\RecipeTypeRepository;
 use App\Repository\UserRepository;
@@ -40,6 +42,53 @@ class RecipeServiceTest extends TestCase
             $this->recipeTypeRepoMock,
             $this->userRepoMock
         );
+    }
+
+    /**
+     * @test
+     */
+    public function save_SaveRecipeWithValidData_OK(): void
+    {
+        $email = 'test@test.com';
+        $recipeName = 'receipt';
+        $recipeTypeId = 1;
+
+        $user = new User();
+        $user = $user->setEmail($email);
+
+        $this->dtoMock
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn($recipeName);
+
+        $this->recipeRepositoryMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['name' => $recipeName])
+            ->willReturn(null);
+
+        $this->dtoMock
+            ->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn($recipeTypeId);
+
+        $this->recipeTypeRepoMock
+            ->expects($this->once())
+            ->method('find')
+            ->with($recipeTypeId)
+            ->willReturn(New RecipeType());
+
+        $this->userInterfaceMock
+            ->method('getUserIdentifier')
+            ->willReturn($email);
+
+        $this->userRepoMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with(['email' => $email])
+            ->willReturn($user);
+
+        $this->service->save($this->dtoMock, $this->userInterfaceMock);
     }
 
     /**
