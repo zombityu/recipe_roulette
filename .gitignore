@@ -77,3 +77,6 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+# Ignore the 'phpcs-cache' directory
+.phpcs-cache
