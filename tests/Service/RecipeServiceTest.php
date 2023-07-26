@@ -162,6 +162,45 @@ class RecipeServiceTest extends TestCase
         );
     }
 
+    /**
+     * @test
+     */
+    public function getRecipe_RequestOneSpecifiedRecipe_RequestedRecipeReturned(): void
+    {
+        $user = $this->userInterfaceMock;
+        $recipeName = 'Test';
+
+        $this->recipeRepositoryMock
+            ->expects($this->once())
+            ->method('findOneByRecipe')
+            ->with($user, $recipeName)
+            ->willReturn($this->createRecipe());
+
+        $actual = $this->service->getRecipe($user, $recipeName);
+
+        $this->assertEquals($this->createRecipeResponseDTO(), $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function getRecipe_RequestADoesNotExistRecipe_ExceptionReturned(): void
+    {
+        $user = $this->userInterfaceMock;
+        $recipeName = 'Test';
+
+        $this->recipeRepositoryMock
+            ->expects($this->once())
+            ->method('findOneByRecipe')
+            ->with($user, $recipeName)
+            ->willReturn(null);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('This recipe does not exist!');
+
+        $this->service->getRecipe($user, $recipeName);
+    }
+
     private function createRecipeResponseDTO(): RecipeResponseDTO
     {
         return new RecipeResponseDTO(
