@@ -3,6 +3,7 @@
 namespace App\Tests\Service;
 
 use App\DTO\RecipeRequestDTO;
+use App\DTO\RecipeResponseDTO;
 use App\Entity\Recipe;
 use App\Entity\RecipeType;
 use App\Entity\User;
@@ -138,5 +139,49 @@ class RecipeServiceTest extends TestCase
         $this->expectExceptionMessage('Recipe Type does not exist!');
 
         $this->service->save($this->dtoMock, $this->userInterfaceMock);
+    }
+
+    /**
+     * @test
+     */
+    public function getAllRecipes_RequestAllRecipes_AllDataReturned(): void
+    {
+        $this->recipeRepositoryMock
+            ->expects($this->once())
+            ->method('findAllRecipe')
+            ->with($this->userInterfaceMock)
+            ->willReturn([
+                $this->createRecipe(),
+            ]);
+
+        $expected = $this->service->getAllRecipes($this->userInterfaceMock);
+
+        $this->assertEquals(
+            [$this->createRecipeResponseDTO()],
+            $expected
+        );
+    }
+
+    private function createRecipeResponseDTO(): RecipeResponseDTO
+    {
+        return new RecipeResponseDTO(
+            'Test',
+            'Test',
+            'Test',
+            'Meat'
+        );
+    }
+
+    private function createRecipe(): Recipe
+    {
+        $type = new RecipeType();
+        $type->setName('Meat');
+
+        $recipe = new Recipe();
+        $recipe->setName('Test');
+        $recipe->setDescription('Test');
+        $recipe->setPhoto('Test');
+        $recipe->setType($type);
+        return $recipe;
     }
 }

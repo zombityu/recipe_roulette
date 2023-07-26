@@ -19,8 +19,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RecipeService implements RecipeServiceInterface
 {
     public function __construct(
-        private readonly RecipeRepository $receiptRepository,
-        private readonly RecipeTypeRepository $receiptTypeRepository,
+        private readonly RecipeRepository $recipeRepository,
+        private readonly RecipeTypeRepository $recipeTypeRepository,
         private readonly UserRepository $userRepository
     ) {
     }
@@ -39,7 +39,7 @@ class RecipeService implements RecipeServiceInterface
 
         $recipe = $this->createRecipe($name, $receiptDTO, $type, $user);
 
-        $this->receiptRepository->save($recipe, true);
+        $this->recipeRepository->save($recipe, true);
     }
 
 
@@ -61,7 +61,7 @@ class RecipeService implements RecipeServiceInterface
 
     public function getAllRecipes(UserInterface $user): array
     {
-        $recipes = $this->receiptRepository->findAllRecipe($user);
+        $recipes = $this->recipeRepository->findAllRecipe($user);
 
         return $this->createRecipeResponseArray($recipes);
     }
@@ -71,7 +71,7 @@ class RecipeService implements RecipeServiceInterface
      */
     public function getRecipe(UserInterface $user, string $recipe): RecipeResponseDTO
     {
-        $recipe = $this->receiptRepository->findOneByRecipe($user, $recipe);
+        $recipe = $this->recipeRepository->findOneByRecipe($user, $recipe);
 
         if ($recipe === null) {
             throw new InvalidArgumentException('This recipe does not exist!');
@@ -109,13 +109,13 @@ class RecipeService implements RecipeServiceInterface
      */
     public function deleteRecipe(UserInterface $user, string $recipeName): void
     {
-        $recipe = $this->receiptRepository->findOneByRecipe($user, $recipeName);
-        $this->receiptRepository->remove($recipe, true);
+        $recipe = $this->recipeRepository->findOneByRecipe($user, $recipeName);
+        $this->recipeRepository->remove($recipe, true);
     }
 
     private function checkReceiptExist(string $name): void
     {
-        $receipt = $this->receiptRepository->findOneBy([
+        $receipt = $this->recipeRepository->findOneBy([
             'name' => $name
         ]);
 
@@ -126,7 +126,7 @@ class RecipeService implements RecipeServiceInterface
 
     public function getRecipeType(RecipeRequestDTO $receiptDTO): RecipeType
     {
-        $type = $this->receiptTypeRepository->find($receiptDTO->getTypeId());
+        $type = $this->recipeTypeRepository->find($receiptDTO->getTypeId());
 
         if ($type === null) {
             throw new InvalidArgumentException("Recipe Type does not exist!");
