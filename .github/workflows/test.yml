@@ -38,6 +38,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          extensions: mbstring, pdo_mysql
+
+      - uses: docker://symfonycorp/cli:latest
+        with:
+          args: composer global require symfony/cli
+
+      - run: symfony check:requirements
 
       - name: Install dependencies
         run: composer install
@@ -49,10 +56,10 @@ jobs:
         run: symfony console doctrine:database:create --if-not-exists --env=test
 
       - name: Migrate test database
-        run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
+        run: symfony console doctrine:migrations:migrate --env=test --no-interaction
 
       - name: Load fixtures
-        run: vendor/bin/doctrine fixtures:load --append
+        run: symfony console --env=test doctrine:fixtures:load
 
       - name: Run functional tests
         run: vendor/bin/phpunit tests/Functional
