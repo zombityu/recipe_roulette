@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  unit_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,4 +25,28 @@ jobs:
         run: composer install --prefer-dist --no-interaction
 
       - name: PHPUnit tests
-        run: ./vendor/bin/phpunit tests
+        run: ./vendor/bin/phpunit tests/Unit
+
+  functional_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP and database
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install dependencies
+        run: composer install --no-interaction
+
+      - name: Set up the database
+        run: vendor/bin/doctrine orm:schema-tool:create
+
+      - name: Load fixtures
+        run: vendor/bin/doctrine fixtures:load --append
+
+      - name: Run functional tests
+        run: vendor/bin/phpunit tests/Functional
