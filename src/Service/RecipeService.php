@@ -124,7 +124,7 @@ class RecipeService implements RecipeServiceInterface
         }
     }
 
-    public function getRecipeType(RecipeRequestDTO $receiptDTO): RecipeType
+    private function getRecipeType(RecipeRequestDTO $receiptDTO): RecipeType
     {
         $type = $this->recipeTypeRepository->find($receiptDTO->getTypeId());
 
