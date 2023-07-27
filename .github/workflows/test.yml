@@ -40,13 +40,13 @@ jobs:
           php-version: '8.1'
 
       - name: Install dependencies
-        run: composer install --no-interaction
+        run: composer install
 
       - name: Start Docker Compose
         run: docker-compose up -d
 
       - name: Create or update test database
-        run: php bin/console doctrine:database:create --if-not-exists --env=test
+        run: symfony console doctrine:database:create --if-not-exists --env=test
 
       - name: Migrate test database
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
