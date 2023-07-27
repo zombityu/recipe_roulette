@@ -38,9 +38,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          extensions: pdo_mysql, mb_string, pdo, php-curl
 
-      - name: Install dependencies
-        run: composer install
+      - name: Install composer and dependencies
+        uses: php-actions/composer@v6
 
       - name: Start Docker Compose
         run: docker-compose up -d
