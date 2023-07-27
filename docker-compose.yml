@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: app
-      MYSQL_USER: admin
+      MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
     ports:
