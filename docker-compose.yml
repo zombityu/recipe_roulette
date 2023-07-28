@@ -14,9 +14,6 @@ services:
       - "3307:3306"
     volumes:
       - database-data:/var/lib/mysql
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
 volumes:
   database-data:
-  mysql_socket:
-    driver: local
