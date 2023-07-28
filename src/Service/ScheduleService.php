@@ -104,10 +104,6 @@ class ScheduleService implements ScheduleServiceInterface
         return $this->createScheduleDtoArray($recipes);
     }
 
-    /**
-     * @param array $recipes
-     * @return array
-     */
     public function createScheduleDtoArray(array $recipes): array
     {
         $recipesArray = [];

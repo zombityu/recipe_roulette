@@ -35,10 +35,8 @@ class ScheduleController extends AbstractController
     #[Route('/api/spin-the-wheel', name: 'spin_the_wheel', methods: 'GET')]
     public function spinTheWheel(): Response
     {
-        $user = $this->getUser();
-
         try {
-            $result = $this->scheduleService->spinTheWheel($user);
+            $result = $this->scheduleService->spinTheWheel($this->getUser());
         } catch (InvalidArgumentException $e) {
             return new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
         }
@@ -50,10 +48,8 @@ class ScheduleController extends AbstractController
     #[Route('/api/add-schedule/{recipeId}', name: 'add_recipe_to_schedule', methods: 'POST')]
     public function addRecipeToSchedule(string $recipeId): Response
     {
-        $user = $this->getUser();
-
         try {
-            $this->scheduleService->addRecipeToSchedule($user, $recipeId);
+            $this->scheduleService->addRecipeToSchedule($this->getUser(), $recipeId);
         } catch (Exception $e) {
             return new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
         }
@@ -64,8 +60,6 @@ class ScheduleController extends AbstractController
     #[Route('/api/schedules', name: 'get_all_schedule', methods: 'GET')]
     public function getSchedules(): Response
     {
-        $user = $this->getUser();
-
-        $schedules = $this->scheduleService->getAllSchedules($user);
+        $schedules = $this->scheduleService->getAllSchedules($this->getUser());
     }
 }
