@@ -7,19 +7,19 @@ namespace App\Controller;
 use App\DTO\DTOSerializer;
 use App\DTO\RegistrationDTO;
 use App\DTO\ResponseDto;
-use App\Service\RegistrationServiceInterface;
+use App\Service\UserServiceInterface;
 use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class RegistrationController extends AbstractController
+class UserController extends AbstractController
 {
     private readonly DTOSerializer $dtoSerializer;
-    private readonly RegistrationServiceInterface $registrationService;
+    private readonly UserServiceInterface $registrationService;
 
-    public function __construct(DTOSerializer $dtoSerializer, RegistrationServiceInterface $registrationService)
+    public function __construct(DTOSerializer $dtoSerializer, UserServiceInterface $registrationService)
     {
         $this->dtoSerializer = $dtoSerializer;
         $this->registrationService = $registrationService;
