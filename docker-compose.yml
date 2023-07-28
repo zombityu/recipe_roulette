@@ -18,3 +18,5 @@ services:
 
 volumes:
   database-data:
+  mysql_socket:
+    driver: local
