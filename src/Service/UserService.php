@@ -31,7 +31,7 @@ class UserService implements UserServiceInterface
 
         $validationErrors = $this->checkUserIsValid($this->validator->validate($user));
 
-        if ($validationErrors > 0) {
+        if (count($validationErrors) > 0) {
             return $validationErrors;
         }
 
