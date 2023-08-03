@@ -118,7 +118,7 @@ class Recipe
     {
         if (!$this->schedules->contains($schedule)) {
             $this->schedules->add($schedule);
-            $schedule->setRecipeId($this);
+            $schedule->setRecipe($this);
         }
 
         return $this;
@@ -128,8 +128,8 @@ class Recipe
     {
         if ($this->schedules->removeElement($schedule)) {
             // set the owning side to null (unless already changed)
-            if ($schedule->getRecipeId() === $this) {
-                $schedule->setRecipeId(null);
+            if ($schedule->getRecipe() === $this) {
+                $schedule->setRecipe(null);
             }
         }
 

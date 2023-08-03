@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\DTO\DTOSerializer;
 use App\DTO\ResponseDto;
 use App\Service\ScheduleServiceInterface;
 use Exception;
@@ -35,8 +34,14 @@ class ScheduleController extends AbstractController
     #[Route('/api/spin-the-wheel', name: 'spin_the_wheel', methods: 'GET')]
     public function spinTheWheel(): Response
     {
+        $user = $this->getUser();
+
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
+
         try {
-            $result = $this->scheduleService->spinTheWheel($this->getUser());
+            $result = $this->scheduleService->spinTheWheel($user);
         } catch (InvalidArgumentException $e) {
             return new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
         }
@@ -48,8 +53,14 @@ class ScheduleController extends AbstractController
     #[Route('/api/add-schedule/{recipeId}', name: 'add_recipe_to_schedule', methods: 'POST')]
     public function addRecipeToSchedule(string $recipeId): Response
     {
+        $user = $this->getUser();
+
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
+
         try {
-            $this->scheduleService->addRecipeToSchedule($this->getUser(), $recipeId);
+            $this->scheduleService->addRecipeToSchedule($user, $recipeId);
         } catch (Exception $e) {
             return new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
         }
@@ -60,6 +71,19 @@ class ScheduleController extends AbstractController
     #[Route('/api/schedules', name: 'get_all_schedule', methods: 'GET')]
     public function getSchedules(): Response
     {
-        $schedules = $this->scheduleService->getAllSchedules($this->getUser());
+        $user = $this->getUser();
+
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
+
+        try {
+            $schedules = $this->scheduleService->getAllSchedules($user);
+        } catch (InvalidArgumentException $e) {
+            return new Response($e->getMessage(), Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->json($schedules, Response::HTTP_CREATED)
+            ->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 }

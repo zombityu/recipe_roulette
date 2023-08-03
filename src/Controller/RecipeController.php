@@ -31,6 +31,10 @@ class RecipeController extends AbstractController
     {
         $user = $this->getUser();
 
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
+
         $recipes = $this->receiptService->getAllRecipes($user);
 
         return $this->json($recipes)
@@ -41,6 +45,10 @@ class RecipeController extends AbstractController
     public function getRecipe(string $recipeName): Response
     {
         $user = $this->getUser();
+
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
 
         try {
             $recipeDto = $this->receiptService->getRecipe($user, $recipeName);
@@ -63,6 +71,10 @@ class RecipeController extends AbstractController
 
         $user = $this->getUser();
 
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
+
         try {
             $this->receiptService->save($receiptDTO, $user);
         } catch (InvalidArgumentException $e) {
@@ -79,6 +91,10 @@ class RecipeController extends AbstractController
     public function deleteRecipe(string $recipeName): Response
     {
         $user = $this->getUser();
+
+        if ($user === null) {
+            return new Response('Unable to access this page! Please log in!', Response::HTTP_FORBIDDEN);
+        }
 
         $this->receiptService->deleteRecipe($user, $recipeName);
 

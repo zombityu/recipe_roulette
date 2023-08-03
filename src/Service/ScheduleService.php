@@ -9,6 +9,7 @@ use App\DTO\ScheduleDTO;
 use App\Entity\Recipe;
 use App\Entity\Schedule;
 use App\Entity\User;
+use App\Exception\NotFoundException;
 use App\Repository\RecipeRepository;
 use App\Repository\ScheduleRepository;
 use App\Repository\UserRepository;
@@ -36,7 +37,7 @@ class ScheduleService implements ScheduleServiceInterface
     {
         $recipes = $this->recipeRepository->findAllRecipe($user);
 
-        if (empty($recipes)) {
+        if ($recipes === []) {
             throw new InvalidArgumentException('Recipe does not exists!');
         }
 
@@ -55,25 +56,32 @@ class ScheduleService implements ScheduleServiceInterface
     private function getRecipeResponseDTO(Recipe $randomRecipes): RecipeResponseDTO
     {
         return new RecipeResponseDTO(
-            $randomRecipes->getName(),
-            $randomRecipes->getPhoto(),
-            $randomRecipes->getDescription(),
-            $randomRecipes->getType()->getName()
+            $randomRecipes->getName() ?? "",
+            $randomRecipes->getPhoto() ?? "",
+            $randomRecipes->getDescription() ?? "",
+            $randomRecipes->getType()?->getName() ?? ""
         );
     }
 
+    /**
+     * @throws NotFoundException
+     */
     public function addRecipeToSchedule(UserInterface $user, string $recipeId): void
     {
         $user = $this->userRepository->findOneBy(
             ['email' => $user->getUserIdentifier()]
         );
 
+        if ($user === null) {
+            throw new NotFoundException('User does not exist!');
+        }
+
         $recipe = $this->recipeRepository->findOneBy(
             ['id' => $recipeId],
         );
 
         if ($recipe === null) {
-            throw new InvalidArgumentException('Recipe does not exist!');
+            throw new NotFoundException('Recipe does not exist!');
         }
 
         $schedule = $this->createSchedule($recipe, $user);

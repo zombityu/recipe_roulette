@@ -59,7 +59,7 @@ class RecipeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return array{Recipe}
+     * @return array<int, Recipe>
      */
     public function findAllRecipe(UserInterface $user): array
     {

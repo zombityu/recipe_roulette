@@ -37,7 +37,7 @@ class UserController extends AbstractController
         try {
             $errorMessages = $this->registrationService->registerUser($data);
 
-            if (!empty($errorMessages)) {
+            if (is_array($errorMessages)) {
                 return $this->json(
                     new ResponseDto(false, 'The provided data is invalid.', $errorMessages),
                     422

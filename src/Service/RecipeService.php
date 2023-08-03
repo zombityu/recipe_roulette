@@ -9,6 +9,7 @@ use App\DTO\RecipeResponseDTO;
 use App\Entity\Recipe;
 use App\Entity\RecipeType;
 use App\Entity\User;
+use App\Exception\NotFoundException;
 use App\Repository\RecipeRepository;
 use App\Repository\RecipeTypeRepository;
 use App\Repository\UserRepository;
@@ -36,6 +37,10 @@ class RecipeService implements RecipeServiceInterface
         $user = $this->userRepository->findOneBy([
             'email' => $user->getUserIdentifier(),
         ]);
+
+        if ($user === null) {
+            throw new NotFoundException('User does not exist!');
+        }
 
         $recipe = $this->createRecipe($name, $receiptDTO, $type, $user);
 
@@ -84,10 +89,10 @@ class RecipeService implements RecipeServiceInterface
     private function getRecipeResponseDTO(Recipe $recipe): RecipeResponseDTO
     {
         return new RecipeResponseDTO(
-            $recipe->getName(),
-            $recipe->getPhoto(),
-            $recipe->getDescription(),
-            $recipe->getType()->getName()
+            $recipe->getName() ?? "",
+            $recipe->getPhoto() ?? "",
+            $recipe->getDescription() ?? "",
+            $recipe->getType()?->getName() ?? ""
         );
     }
 
@@ -105,11 +110,16 @@ class RecipeService implements RecipeServiceInterface
     }
 
     /**
-     * @throws NonUniqueResultException
+     * @throws NonUniqueResultException|NotFoundException
      */
     public function deleteRecipe(UserInterface $user, string $recipeName): void
     {
         $recipe = $this->recipeRepository->findOneByRecipe($user, $recipeName);
+
+        if ($recipe === null) {
+            throw new NotFoundException("Recipe does not exists!");
+        }
+
         $this->recipeRepository->remove($recipe, true);
     }
 
