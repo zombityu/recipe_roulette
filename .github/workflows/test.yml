@@ -37,6 +37,9 @@ jobs:
       - name: Start Docker Compose
         run: docker-compose up -d
 
+      - name: Install dependencies
+        run: docker-compose exec -T php composer install --no-interaction
+
       - name: Create or update test database
         run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
 
