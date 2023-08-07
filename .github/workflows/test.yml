@@ -27,37 +27,27 @@ jobs:
       - name: PHPUnit tests
         run: ./vendor/bin/phpunit tests/Unit
 
-# TODO fix this workflow
-#  functional_tests:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Set up PHP and database
-#        uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.1'
-#          extensions: pdo_mysql, mb_string, pdo, php-curl
-#
-#      - name: Install composer and dependencies
-#        uses: php-actions/composer@v6
-#
-#      - name: Start Docker Compose
-#        run: docker-compose up -d
-#
-#      - name: Create or update test database
-#        run: php bin/console doctrine:database:create --if-not-exists --env=test
-#
-#      - name: Migrate test database
-#        run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
-#
-#      - name: Load fixtures
-#        run: vendor/bin/doctrine fixtures:load --append
-#
-#      - name: Run functional tests
-#        run: vendor/bin/phpunit tests/Functional
-#
-#      - name: Stop Docker Compose
-#        run: docker-compose down -v
+  functional_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Start Docker Compose
+        run: docker-compose up -d
+
+      - name: Create or update test database
+        run: php bin/console doctrine:database:create --if-not-exists --env=test
+
+      - name: Migrate test database
+        run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+      - name: Load fixtures
+        run: vendor/bin/doctrine fixtures:load --append
+
+      - name: Run functional tests
+        run: vendor/bin/phpunit tests/Functional
+
+      - name: Stop Docker Compose
+        run: docker-compose down -v

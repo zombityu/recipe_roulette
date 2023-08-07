@@ -3,7 +3,7 @@ name: Code Quality
 on: [push, pull_request]
 
 jobs:
-  sniffer:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
