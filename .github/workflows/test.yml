@@ -29,33 +29,37 @@ jobs:
 
   functional_tests:
     runs-on: ubuntu-latest
-    env:
-#      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker images
+        uses: docker/bake-action@v3
+        with:
+          pull: true
+          load: true
+          files: |
+            docker-compose.yml
+            docker-compose.override.yml
+
       - name: Start Docker Compose
-        run: docker-compose up --build -d
+        run: docker compose up --wait --no-build
 
-      - name: Install dependencies
-        run: docker-compose exec -T php composer install --no-interaction
-
-      - name: Check database URL
-        run: |
-            echo "The database URL is: $DATABASE_URL_TEST"
-            echo "The database URL is: ${{ secrets.DATABASE_URL_TEST }}"
+#      - name: Install dependencies
+#        run: docker-compose exec -T php composer install --no-interaction
 
       - name: Create or update test database
-        run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
+        run:  docker compose exec -T php bin/console -e test doctrine:database:create
 
       - name: Migrate test database
-        run: docker-compose exec -T php php bin/console doctrine:migrations:migrate --env=test --no-interaction
+        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
 
       - name: Load fixtures
-        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load --append
+        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load
 
       - name: Run functional tests
         run: docker-compose exec -T php vendor/bin/phpunit tests/Functional
