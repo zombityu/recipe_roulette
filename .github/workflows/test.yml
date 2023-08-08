@@ -40,6 +40,10 @@ jobs:
       - name: Install dependencies
         run: docker-compose exec -T php composer install --no-interaction
 
+      - name: Check database URL
+        run: |
+            echo "The database URL is: ${{ env.DATABASE_URL }}"
+
 #      - name: Create or update test database
 #        run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
 #
