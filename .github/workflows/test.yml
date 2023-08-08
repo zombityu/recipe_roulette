@@ -30,7 +30,7 @@ jobs:
   functional_tests:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+#      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
 
     steps:
@@ -45,20 +45,19 @@ jobs:
 
       - name: Check database URL
         run: |
-            echo "The database URL is: ${{ DATABASE_URL_TEST }}"
-            echo "The database URL is: ${{ DATABASE_URL }}"
+            echo "The database URL is: ${{ secrets.DATABASE_URL_TEST }}"
 
       - name: Create or update test database
         run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
-#
-#      - name: Migrate test database
-#        run: docker-compose exec -T php php bin/console doctrine:migrations:migrate --env=test --no-interaction
-#
-#      - name: Load fixtures
-#        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load --append
-#
-#      - name: Run functional tests
-#        run: docker-compose exec -T php vendor/bin/phpunit tests/Functional
+
+      - name: Migrate test database
+        run: docker-compose exec -T php php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+      - name: Load fixtures
+        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load --append
+
+      - name: Run functional tests
+        run: docker-compose exec -T php vendor/bin/phpunit tests/Functional
 
       - name: Stop Docker Compose
         run: docker-compose down -v
