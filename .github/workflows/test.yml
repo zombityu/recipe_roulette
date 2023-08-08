@@ -40,14 +40,14 @@ jobs:
       - name: Install dependencies
         run: docker-compose exec -T php composer install --no-interaction
 
-      - name: Create or update test database
-        run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
-
-      - name: Migrate test database
-        run: docker-compose exec -T php php bin/console doctrine:migrations:migrate --env=test --no-interaction
-
-      - name: Load fixtures
-        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load --append
+#      - name: Create or update test database
+#        run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
+#
+#      - name: Migrate test database
+#        run: docker-compose exec -T php php bin/console doctrine:migrations:migrate --env=test --no-interaction
+#
+#      - name: Load fixtures
+#        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load --append
 
       - name: Run functional tests
         run: docker-compose exec -T php vendor/bin/phpunit tests/Functional
