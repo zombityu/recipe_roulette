@@ -1,17 +1,10 @@
 FROM php:8.1-fpm
 
-RUN apt-get update && apt-get install -y \
-    git \
-    libicu-dev \
-    libpq-dev \
-    curl \
-    unzip
-
-RUN docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-install intl
-
-RUN apt-get install -y libzip-dev zip \
+RUN apt-get update && apt-get install -y zlib1g-dev g++ git libicu-dev zip libzip-dev zip \
+    && docker-php-ext-install intl opcache pdo pdo_mysql \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu \
+    && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
 RUN apt-get update && \
@@ -19,11 +12,11 @@ RUN apt-get update && \
         default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pecl install apcu \
-    && docker-php-ext-enable apcu
+RUN apt-get update \
+    && apt-get install -y gnupg2 \
+    && curl -sS https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-RUN curl -LsS https://github.com/symfony/cli/releases/latest/download/symfony_linux_amd64.gz | gunzip -c > /usr/local/bin/symfony && chmod a+x /usr/local/bin/symfony
+WORKDIR /var/www/project
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /var/www/html
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
