@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
 #      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DATABASE_URL_TEST: $DATABASE_URL_TEST
+      DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
 
     steps:
       - name: Checkout code
@@ -45,7 +45,7 @@ jobs:
 
       - name: Check database URL
         run: |
-            echo "The database URL is: ${{ secrets.DATABASE_URL_TEST }}"
+            echo "The database URL is: $DATABASE_URL
 
       - name: Create or update test database
         run:  docker-compose exec -T php php bin/console doctrine:database:create --if-not-exists --env=test
