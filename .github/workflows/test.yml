@@ -36,6 +36,8 @@ jobs:
 
       - name: Start Docker Compose
         run: docker-compose up --build -d
+        env:
+          DATABASE_URL_TEST: ${{ secrets.DATABASE_URL_TEST }}
 
       - name: Install dependencies
         run: docker-compose exec -T php composer install --no-interaction
