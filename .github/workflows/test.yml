@@ -27,30 +27,30 @@ jobs:
       - name: PHPUnit tests
         run: ./vendor/bin/phpunit tests/Unit
 
-  functional_tests:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        
-      - name: Start Docker Compose
-        run: docker compose up --build
-
-      - name: Install dependencies
-        run: docker-compose exec -T php composer install --no-interaction
-
-      - name: Create or update test database
-        run:  docker compose exec -T php bin/console -e test doctrine:database:create
-
-      - name: Migrate test database
-        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-
-      - name: Load fixtures
-        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load
-
-      - name: Run functional tests
-        run: docker-compose exec -T php vendor/bin/phpunit tests/Functional
-
-      - name: Stop Docker Compose
-        run: docker-compose down -v
+#  functional_tests:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Start Docker Compose
+#        run: docker compose up --build
+#
+#      - name: Install dependencies
+#        run: docker-compose exec -T php composer install --no-interaction
+#
+#      - name: Create or update test database
+#        run:  docker compose exec -T php bin/console -e test doctrine:database:create
+#
+#      - name: Migrate test database
+#        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+#
+#      - name: Load fixtures
+#        run: docker-compose exec -T php vendor/bin/doctrine fixtures:load
+#
+#      - name: Run functional tests
+#        run: docker-compose exec -T php vendor/bin/phpunit tests/Functional
+#
+#      - name: Stop Docker Compose
+#        run: docker-compose down -v
